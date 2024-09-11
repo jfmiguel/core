@@ -28,6 +28,8 @@ from homeassistant.const import (
     UnitOfPower,
     UnitOfTemperature,
     UnitOfTime,
+    UnitOfElectricCurrent, 
+    UnitOfElectricPotential,
 )
 from homeassistant.core import CALLBACK_TYPE, HomeAssistant, callback
 from homeassistant.exceptions import PlatformNotReady
@@ -51,6 +53,8 @@ SAJ_UNIT_MAPPINGS = {
     "kWh": UnitOfEnergy.KILO_WATT_HOUR,
     "W": UnitOfPower.WATT,
     "°C": UnitOfTemperature.CELSIUS,
+    "V": UnitOfElectricPotential.VOLT,
+    "A": UnitOfElectricCurrent.AMPERE,
 }
 
 PLATFORM_SCHEMA = SENSOR_PLATFORM_SCHEMA.extend(
@@ -194,7 +198,7 @@ class SAJsensor(SensorEntity):
         self._serialnumber = serialnumber
         self._state = self._sensor.value
 
-        if pysaj_sensor.name in ("current_power", "temperature"):
+        if pysaj_sensor.name in ("current_power", "temperature", "pv1_voltage", "pv1_current"):
             self._attr_state_class = SensorStateClass.MEASUREMENT
         if pysaj_sensor.name == "total_yield":
             self._attr_state_class = SensorStateClass.TOTAL_INCREASING
